@@ -1,0 +1,177 @@
+{
+  "info": {
+    "_postman_id": "d8174efd-d1aa-40b7-a824-a7eae66de794",
+    "name": "New Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21382497"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"email@gmail.com\",\n    \"password\": \"password\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3000/login",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Signup",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"email@gmail.com\",\n    \"password\": \"password\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3000/signup",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["signup"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[AUTH] Profile",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "localhost:3000/profile",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["profile"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[AUTH] Add Quiz",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"LOL Quiz 2\",\n  \"questions\": [\n    {\n      \"title\": \"What is the capital of Guj?\",\n      \"options\": [\n        {\n          \"text\": \"Ahmedabad\",\n          \"is_correct\": true\n        },\n        {\n          \"text\": \"Paris\",\n          \"is_correct\": true\n        },\n        {\n          \"text\": \"Madrid\",\n          \"is_correct\": false\n        }\n      ]\n    },\n    {\n      \"title\": \"What is the best country to live in?\",\n      \"options\": [\n        {\n          \"text\": \"Russia\",\n          \"is_correct\": true\n        },\n        {\n          \"text\": \"China\",\n          \"is_correct\": false\n        },\n        {\n          \"text\": \"USA\",\n          \"is_correct\": true\n        }\n      ]\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3000/quiz/add",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["quiz", "add"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[AUTH] Submit Answers",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"quizId\": 4,\n    \"attempt_data\": [\n        {\n            \"question_id\": 7,\n            \"option_id\": 19\n        },\n        {\n            \"question_id\": 7,\n            \"option_id\": 23\n        }\n    ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3000/quiz/answer",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["quiz", "answer"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[AUTH] Open or Resume or Score a Quiz",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "localhost:3000/quiz/3",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["quiz", "3"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[AUTH] Particular Quiz Leaderboard",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "localhost:3000/quiz/4/leaderboard",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["quiz", "4", "leaderboard"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

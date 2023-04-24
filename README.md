@@ -14,7 +14,7 @@ The objective is to create a restful API for a quiz app. For authentication, you
 | To Do                            | In Progress                 | Done               |
 | -------------------------------- | --------------------------- | ------------------ |
 | Think of edge cases in endpoints |                             | Database Schema    |
-|                                  |                             | Auth0 Integration  |
-|                                  |                             | Data Population    |
+| Deploying                        |                             | Auth0 Integration  |
+| CI/CD Pipelines                  |                             | Data Population    |
 |                                  | Add tests (research how to) | Custom User Routes |
 |                                  |                             | Quiz routes        |
