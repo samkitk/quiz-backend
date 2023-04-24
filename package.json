@@ -19,10 +19,15 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./lib/app.js",
-    "dev": "ts-node ./src/app.ts -r dotenv/config",
-    "local": "tsc-watch --noClear --onSuccess \"node -r dotenv/config lib/app.js\""
+    "prepare": "husky install",
+    "lint": "prettier --check .",
+    "format": "prettier --write .",
+    "dev": "tsc-watch --noClear --onSuccess \"node -r dotenv/config lib/app.js\"",
+    "precommit": "yarn format"
   },
   "devDependencies": {
+    "husky": "^8.0.3",
+    "prettier": "^2.8.8",
     "prisma": "^4.13.0",
     "ts-node": "^10.9.1"
   }
