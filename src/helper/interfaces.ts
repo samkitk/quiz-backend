@@ -33,3 +33,76 @@ export interface DecodedToken {
   scope?: string;
   gty?: string;
 }
+
+export interface QuizInterface {
+  title: string;
+  creator: number;
+}
+
+export interface QuestionInterface {
+  title: string;
+  quiz: number;
+}
+export interface OptionInterface {
+  text: string;
+  is_correct: boolean;
+  question: number;
+}
+
+export interface CombinedQuizInterface {
+  title: string;
+  creator: number;
+  questions: QuestionInterface[];
+}
+export interface RawQuizData {
+  title: string;
+  creator: number;
+  questions: {
+    title: string;
+    options: {
+      text: string;
+      is_correct: boolean;
+    }[];
+  }[];
+}
+
+// {
+//   "title": "Math Quiz",
+//   "creator": 1,
+//   "questions": [
+//     {
+//       "title": "What is 2 + 2?",
+//       "options": [
+//         {
+//           "text": "3",
+//           "is_correct": false
+//         },
+//         {
+//           "text": "4",
+//           "is_correct": true
+//         },
+//         {
+//           "text": "5",
+//           "is_correct": false
+//         }
+//       ]
+//     },
+//     {
+//       "title": "What is 3 + 3?",
+//       "options": [
+//         {
+//           "text": "4",
+//           "is_correct": false
+//         },
+//         {
+//           "text": "5",
+//           "is_correct": false
+//         },
+//         {
+//           "text": "6",
+//           "is_correct": true
+//         }
+//       ]
+//     }
+//   ]
+// }
