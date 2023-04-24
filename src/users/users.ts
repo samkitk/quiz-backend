@@ -1,16 +1,24 @@
 import { auth0_management_client } from "../helper/auth0_helper";
 import { hashIt } from "../helper/hash";
+import { CreateUserResponse } from "../helper/interfaces";
 import { prisma } from "../helper/prisma_helper";
+import { validateEmail } from "../helper/validator";
 
 export async function createUser(email: string, password: string) {
-  // TODO: email validation
+  let isEmailValid = await validateEmail(email);
+
+  if (!isEmailValid) {
+    console.log("Email is not valid");
+    return null;
+  }
 
   try {
-    const createUserResponse = await auth0_management_client.createUser({
-      email: email,
-      password: password,
-      connection: process.env.AUTH0_REALM,
-    });
+    const createUserResponse: CreateUserResponse =
+      await auth0_management_client.createUser({
+        email: email,
+        password: password,
+        connection: process.env.AUTH0_REALM,
+      });
 
     if (createUserResponse) {
       const newUser = await prisma.user.create({
@@ -23,8 +31,10 @@ export async function createUser(email: string, password: string) {
         },
       });
       return newUser;
+    } else {
+      console.log("User not created");
+      return null;
     }
-    return null;
   } catch (error) {
     console.error(error);
     return null;
