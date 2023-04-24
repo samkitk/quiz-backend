@@ -1,4 +1,4 @@
-import { auth0_management_client } from "../helper/auth0_helper";
+import { auth0_client, auth0_management_client } from "../helper/auth0_helper";
 import { hashIt } from "../helper/hash";
 import { CreateUserResponse } from "../helper/interfaces";
 import { prisma } from "../helper/prisma_helper";
@@ -37,6 +37,21 @@ export async function createUser(email: string, password: string) {
     }
   } catch (error) {
     console.error(error);
+    return null;
+  }
+}
+
+export async function loginUser(email: string, password: string) {
+  try {
+    const grant_response = await auth0_client.oauth.passwordGrant({
+      username: email,
+      password: password,
+      audience: process.env.AUTH0_AUDIENCE_URL,
+    });
+    let accessToken = grant_response.access_token;
+    return accessToken;
+  } catch (error) {
+    console.log(error);
     return null;
   }
 }
