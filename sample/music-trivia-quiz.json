@@ -1,0 +1,80 @@
+{
+  "title": "Music Quiz",
+  "questions": [
+    {
+      "title": "Which of the following bands are considered to be part of the 'Big Four' of thrash metal?",
+      "options": [
+        {
+          "text": "Metallica",
+          "is_correct": true
+        },
+        {
+          "text": "Slayer",
+          "is_correct": true
+        },
+        {
+          "text": "Megadeth",
+          "is_correct": true
+        },
+        {
+          "text": "Iron Maiden",
+          "is_correct": false
+        },
+        {
+          "text": "Anthrax",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "title": "Which of the following albums were released by Pink Floyd?",
+      "options": [
+        {
+          "text": "The Wall",
+          "is_correct": true
+        },
+        {
+          "text": "Led Zeppelin IV",
+          "is_correct": false
+        },
+        {
+          "text": "Back in Black",
+          "is_correct": false
+        },
+        {
+          "text": "Dark Side of the Moon",
+          "is_correct": true
+        },
+        {
+          "text": "Paranoid",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "title": "Which of the following songs were written by John Lennon and Paul McCartney?",
+      "options": [
+        {
+          "text": "I Want to Hold Your Hand",
+          "is_correct": true
+        },
+        {
+          "text": "Hey Jude",
+          "is_correct": true
+        },
+        {
+          "text": "Let It Be",
+          "is_correct": true
+        },
+        {
+          "text": "Yesterday",
+          "is_correct": true
+        },
+        {
+          "text": "Stairway to Heaven",
+          "is_correct": false
+        }
+      ]
+    }
+  ]
+}

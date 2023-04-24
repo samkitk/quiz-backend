@@ -1,0 +1,64 @@
+{
+  "title": "Movie Trivia Quiz",
+  "questions": [
+    {
+      "title": "Who directed the movie 'The Godfather'?",
+      "options": [
+        {
+          "text": "Martin Scorsese",
+          "is_correct": false
+        },
+        {
+          "text": "Francis Ford Coppola",
+          "is_correct": true
+        },
+        {
+          "text": "Steven Spielberg",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "title": "Which movie won the Best Picture Oscar in 2020?",
+      "options": [
+        {
+          "text": "1917",
+          "is_correct": false
+        },
+        {
+          "text": "Parasite",
+          "is_correct": true
+        },
+        {
+          "text": "Once Upon a Time in Hollywood",
+          "is_correct": false
+        },
+        {
+          "text": "Joker",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "title": "Who played the character of Tony Stark in the Marvel Cinematic Universe?",
+      "options": [
+        {
+          "text": "Tom Cruise",
+          "is_correct": false
+        },
+        {
+          "text": "Robert Downey Jr.",
+          "is_correct": true
+        },
+        {
+          "text": "Brad Pitt",
+          "is_correct": false
+        },
+        {
+          "text": "Johnny Depp",
+          "is_correct": false
+        }
+      ]
+    }
+  ]
+}
