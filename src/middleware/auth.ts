@@ -2,21 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { auth0_client } from "../helper/auth0_helper";
 import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
-
-interface AuthenticatedRequest extends Request {
-  user?: any;
-}
-
-interface DecodedToken {
-  iss?: string;
-  sub?: string;
-  aud?: string;
-  iat?: number;
-  exp?: number;
-  azp?: string;
-  scope?: string;
-  gty?: string;
-}
+import { AuthenticatedRequest, DecodedToken } from "../helper/interfaces";
 
 export const decodeToken = async (
   req: AuthenticatedRequest,
