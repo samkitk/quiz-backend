@@ -77,3 +77,8 @@ export interface Quiz {
   title: string;
   questions: QuizQuestion[];
 }
+
+export interface AttemptQuestion {
+  question_id: number;
+  option_id: number;
+}

@@ -4,3 +4,11 @@ export async function validateEmail(email: string) {
   );
   return emailRegex.test(email);
 }
+
+export function toArray(input: any) {
+  if (Array.isArray(input)) {
+    return input;
+  } else {
+    return [input];
+  }
+}

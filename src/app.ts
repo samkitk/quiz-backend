@@ -1,8 +1,10 @@
+import { user } from "@prisma/client";
 import { auth0_client, auth0_management_client } from "./helper/auth0_helper";
-import { RawQuizData } from "./helper/interfaces";
+import { AttemptQuestion, RawQuizData } from "./helper/interfaces";
 import { decodeToken } from "./middleware/auth";
-import { createQuiz, getQuiz } from "./quiz/quiz";
+import { createQuiz, getQuiz, logAttempt } from "./quiz/quiz";
 import { createUser, fetchUserFromAuth0, loginUser } from "./users/users";
+import { toArray } from "./helper/validator";
 
 const { auth } = require("express-openid-connect");
 const express = require("express");
@@ -86,10 +88,32 @@ app.get("/quiz/:id", decodeToken, async (req: any, res: any) => {
   }
 });
 
+app.post("/quiz/answer", decodeToken, async (req: any, res: any) => {
+  let user = await fetchUserFromAuth0(req.user);
+  if (!user) {
+    return res.status(401).send({ message: "User not found" });
+  }
+  let quizId = req.body.quizId;
+  let attempt_data: AttemptQuestion[] = toArray(req.body.attempt_data);
+  try {
+    let attempt = await logAttempt(quizId, attempt_data, user.id);
+    if (attempt.count > 0) {
+      res.status(200).send({ message: "Attempt submitted successfully" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(401).send({ message: "Quiz submission error", error: error });
+  }
+});
+
 app.get("/profile", decodeToken, (req: any, res: any) => {
   res.send(JSON.stringify({ hello: req.user }));
 });
 
-app.listen(3000, () => {
-  console.log("Server listening on port 3000");
-});
+if (process.env.NODE_ENV === "production") {
+  app.listen(process.env.PORT || 3000);
+} else {
+  app.listen(3000, () => {
+    console.log("Server listening on port 3000");
+  });
+}

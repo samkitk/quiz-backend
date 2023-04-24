@@ -13,6 +13,8 @@ model logs {
   quiz                 Int
   question_attempted   Int
   score                Int
+  option_attempted     Int
+  options              options   @relation(fields: [option_attempted], references: [id], onDelete: Cascade)
   user                 user      @relation(fields: [participant], references: [id], onDelete: Cascade)
   questions            questions @relation(fields: [question_attempted], references: [id], onDelete: Cascade)
   quiz_logs_quizToquiz quiz      @relation("logs_quizToquiz", fields: [quiz], references: [id], onDelete: Cascade)
@@ -23,6 +25,7 @@ model options {
   text                                   String
   is_correct                             Boolean   @default(false)
   questions                              Int
+  logs                                   logs[]
   questions_options_questionsToquestions questions @relation("options_questionsToquestions", fields: [questions], references: [id], onDelete: Cascade)
 }
 

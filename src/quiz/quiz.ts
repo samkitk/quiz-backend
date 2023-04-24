@@ -1,4 +1,4 @@
-import { Quiz, RawQuizData } from "../helper/interfaces";
+import { AttemptQuestion, Quiz, RawQuizData } from "../helper/interfaces";
 import { prisma } from "../helper/prisma_helper";
 
 export async function createQuiz(quizData: RawQuizData, creator: number) {
@@ -85,4 +85,41 @@ export async function getQuiz(quizId: number) {
   } catch (error) {
     console.error(error);
   }
+}
+
+export async function logAttempt(
+  quizId: number,
+  attempt_data: AttemptQuestion[],
+  participant: number
+) {
+  const newAttempt = await prisma.logs.createMany({
+    data: await Promise.all(
+      attempt_data.map(async (attempt) => {
+        return {
+          participant: participant,
+          quiz: quizId,
+          question_attempted: attempt.question_id,
+          option_attempted: attempt.option_id,
+          score: await isAnswerCorrect(attempt.option_id),
+        };
+      })
+    ),
+  });
+  console.log("newAttempt", newAttempt);
+  return newAttempt;
+}
+
+export async function isAnswerCorrect(optionId: number) {
+  const option = await prisma.options.findUnique({
+    where: {
+      id: optionId,
+    },
+    select: {
+      is_correct: true,
+    },
+  });
+  if (option) {
+    return option.is_correct ? 1 : 0;
+  }
+  return 0;
 }
