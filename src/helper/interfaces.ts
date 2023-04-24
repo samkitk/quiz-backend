@@ -50,7 +50,6 @@ export interface OptionInterface {
 }
 export interface RawQuizData {
   title: string;
-  creator: number;
   questions: {
     title: string;
     options: {

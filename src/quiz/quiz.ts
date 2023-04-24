@@ -2,6 +2,9 @@ import { AttemptQuestion, Quiz, RawQuizData } from "../helper/interfaces";
 import { prisma } from "../helper/prisma_helper";
 
 export async function createQuiz(quizData: RawQuizData, creator: number) {
+  if (!quizData.title || quizData.questions.length === 0) {
+    throw new Error("Invalid quiz data");
+  }
   const newQuiz = await prisma.quiz.create({
     data: {
       title: quizData.title,
