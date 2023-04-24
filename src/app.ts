@@ -1,7 +1,8 @@
-import { ClientRequest } from "http";
+import { auth0_client, auth0_management_client } from "./helper/auth0_helper";
+import { decodeToken } from "./middleware/auth";
+import { createUser } from "./users/users";
 
 const { auth } = require("express-openid-connect");
-var AuthenticationClient = require("auth0").AuthenticationClient;
 const express = require("express");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -19,42 +20,47 @@ const config = {
   secret: process.env.AUTH0_CLIENT_SECRET,
 };
 
-var auth0 = new AuthenticationClient({
-  domain: process.env.AUTH0_DOMAIN,
-  clientId: process.env.AUTH0_CLIENT_ID,
-  clientSecret: process.env.AUTH0_CLIENT_SECRET,
-});
-
-// req.isAuthenticated is provided from the auth router
-app.get("/", auth(config), (req: any, res: any) => {
+app.get("/", (req: any, res: any) => {
   res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
 });
 
-app.post("/post-login", async (req: any, res: any) => {
+app.post("/login", async (req: any, res: any) => {
   var data = req.body;
-  let username = data.username;
+  let email = data.email;
   let password = data.password;
 
-  const authResult = await req.oidc
-    .grant({
-      grant_type: "http://auth0.com/oauth/grant-type/password-realm",
-      username,
-      password,
+  try {
+    const grant_response = await auth0_client.oauth.passwordGrant({
+      username: email,
+      password: password,
       audience: process.env.AUTH0_AUDIENCE_URL,
-      realm: process.env.AUTH0_REALM,
-    })
-    .catch((err: any) => {
-      console.error(err);
-      res.status(401).send("Invalid credentials");
     });
-
-  // Generate access token
-  const { access_token } = jwt.decode(authResult.access_token);
-  res.send(access_token);
+    let accessToken = grant_response.access_token;
+    res.status(200).send({ accessToken: accessToken });
+  } catch (error) {
+    console.log(error);
+    res.status(401).send({ error: error });
+  }
 });
 
-app.get("/profile", auth(config), (req: any, res: any) => {
-  res.send(JSON.stringify(req.oidc.user));
+app.post("/signup", async (req: any, res: any) => {
+  const { email, password } = req.body;
+
+  try {
+    let newUser = await createUser(email, password);
+    if (newUser) {
+      res.status(200).send({ message: "User created successfully" });
+    } else {
+      res.status(401).send({ message: "User not created" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(401).send({ error: error });
+  }
+});
+
+app.get("/profile", decodeToken, (req: any, res: any) => {
+  res.send(JSON.stringify({ hello: req.user }));
 });
 
 app.listen(3000, () => {
