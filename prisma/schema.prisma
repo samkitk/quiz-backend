@@ -50,7 +50,7 @@ model user {
   email         String  @unique
   username      String? @unique
   password      String
-  auth0_user_id String?
+  auth0_user_id String? @unique(map: "unique_auth0_user_id")
   last_login_at String?
   created_at    String?
   logs          logs[]
