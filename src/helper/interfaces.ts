@@ -48,12 +48,6 @@ export interface OptionInterface {
   is_correct: boolean;
   question: number;
 }
-
-export interface CombinedQuizInterface {
-  title: string;
-  creator: number;
-  questions: QuestionInterface[];
-}
 export interface RawQuizData {
   title: string;
   creator: number;
@@ -66,43 +60,20 @@ export interface RawQuizData {
   }[];
 }
 
-// {
-//   "title": "Math Quiz",
-//   "creator": 1,
-//   "questions": [
-//     {
-//       "title": "What is 2 + 2?",
-//       "options": [
-//         {
-//           "text": "3",
-//           "is_correct": false
-//         },
-//         {
-//           "text": "4",
-//           "is_correct": true
-//         },
-//         {
-//           "text": "5",
-//           "is_correct": false
-//         }
-//       ]
-//     },
-//     {
-//       "title": "What is 3 + 3?",
-//       "options": [
-//         {
-//           "text": "4",
-//           "is_correct": false
-//         },
-//         {
-//           "text": "5",
-//           "is_correct": false
-//         },
-//         {
-//           "text": "6",
-//           "is_correct": true
-//         }
-//       ]
-//     }
-//   ]
-// }
+interface QuizOption {
+  id: number;
+  text: string;
+  is_correct: boolean;
+}
+
+interface QuizQuestion {
+  id: number;
+  title: string;
+  options: QuizOption[];
+}
+
+export interface Quiz {
+  id: number;
+  title: string;
+  questions: QuizQuestion[];
+}
