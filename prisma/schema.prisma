@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model logs {
+  id                   Int       @id @default(autoincrement())
+  participant          Int
+  quiz                 Int
+  question_attempted   Int
+  score                Int
+  user                 user      @relation(fields: [participant], references: [id], onDelete: Cascade)
+  questions            questions @relation(fields: [question_attempted], references: [id], onDelete: Cascade)
+  quiz_logs_quizToquiz quiz      @relation("logs_quizToquiz", fields: [quiz], references: [id], onDelete: Cascade)
+}
+
+model options {
+  id                                     Int       @id @default(autoincrement())
+  text                                   String
+  is_correct                             Boolean   @default(false)
+  questions                              Int
+  questions_options_questionsToquestions questions @relation("options_questionsToquestions", fields: [questions], references: [id], onDelete: Cascade)
+}
+
+model questions {
+  id                                   Int       @id @default(autoincrement())
+  title                                String
+  quiz                                 Int
+  logs                                 logs[]
+  options_options_questionsToquestions options[] @relation("options_questionsToquestions")
+  quiz_questions_quizToquiz            quiz      @relation("questions_quizToquiz", fields: [quiz], references: [id], onDelete: Cascade)
+}
+
+model quiz {
+  id                             Int         @id @default(autoincrement())
+  title                          String
+  creator                        Int
+  logs_logs_quizToquiz           logs[]      @relation("logs_quizToquiz")
+  questions_questions_quizToquiz questions[] @relation("questions_quizToquiz")
+  user                           user        @relation(fields: [creator], references: [id], onDelete: Cascade)
+}
+
+model user {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  username String @unique
+  password String
+  logs     logs[]
+  quiz     quiz[]
+}
