@@ -2,7 +2,13 @@ import { user } from "@prisma/client";
 import { auth0_client, auth0_management_client } from "./helper/auth0_helper";
 import { AttemptQuestion, RawQuizData } from "./helper/interfaces";
 import { decodeToken } from "./middleware/auth";
-import { createQuiz, getQuiz, logAttempt, resumeQuiz } from "./quiz/quiz";
+import {
+  createQuiz,
+  getLeaderboard,
+  getQuiz,
+  logAttempt,
+  resumeQuiz,
+} from "./quiz/quiz";
 import { createUser, fetchUserFromAuth0, loginUser } from "./users/users";
 import { toArray } from "./helper/validator";
 
@@ -104,6 +110,21 @@ app.post("/quiz/answer", decodeToken, async (req: any, res: any) => {
   } catch (error) {
     console.log(error);
     res.status(401).send({ message: "Quiz submission error", error: error });
+  }
+});
+
+app.get("/quiz/:id/leaderboard", decodeToken, async (req: any, res: any) => {
+  let quizId = req.params.id;
+  try {
+    let leaderboard = await getLeaderboard(parseInt(quizId));
+    if (leaderboard) {
+      res.status(200).send({ leaderboard: leaderboard });
+    } else {
+      res.status(400).send({ message: "Leaderboard not present" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(401).send({ message: "Leaderboard Error", error: error });
   }
 });
 

@@ -171,7 +171,7 @@ export async function logAttempt(
           quiz: quizId,
           question_attempted: attempt.question_id,
           option_attempted: attempt.option_id,
-          score: await isAnswerCorrect_v2(attempt.option_id),
+          score: await isAnswerCorrect_v2(attempt.question_id),
         };
       })
     ),
@@ -251,4 +251,43 @@ export async function getScore(quizId: number, participant: number) {
   });
   console.log("Score", score._sum.score);
   return score._sum.score;
+}
+
+export async function getLeaderboard(quizId: number) {
+  const groupedData = await prisma.logs.groupBy({
+    where: {
+      quiz: quizId,
+    },
+    by: ["participant"],
+    _sum: {
+      score: true,
+    },
+    _count: {
+      score: true,
+    },
+    _avg: {
+      score: true,
+    },
+  });
+
+  const participantIds = groupedData.map((group) => group.participant);
+  const users = await prisma.user.findMany({
+    where: {
+      id: { in: participantIds },
+    },
+    select: {
+      id: true,
+      email: true,
+    },
+  });
+
+  const leaderboard = groupedData.map((group) => {
+    const user = users.find((user) => user.id === group.participant);
+    return {
+      ...group,
+      email: user?.email,
+    };
+  });
+
+  return leaderboard;
 }

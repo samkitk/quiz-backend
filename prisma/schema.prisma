@@ -12,7 +12,7 @@ model logs {
   participant          Int
   quiz                 Int
   question_attempted   Int
-  score                Int
+  score                Decimal   @db.Decimal(5, 2)
   option_attempted     Int
   options              options   @relation(fields: [option_attempted], references: [id], onDelete: Cascade)
   user                 user      @relation(fields: [participant], references: [id], onDelete: Cascade)
