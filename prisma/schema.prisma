@@ -45,11 +45,14 @@ model quiz {
 }
 
 model user {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
-  username String @unique
-  password String
-  logs     logs[]
-  quiz     quiz[]
+  id            Int     @id @default(autoincrement())
+  name          String
+  email         String  @unique
+  username      String  @unique
+  password      String
+  auth0_user_id String?
+  last_login_at String?
+  created_at    String?
+  logs          logs[]
+  quiz          quiz[]
 }
