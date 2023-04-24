@@ -166,6 +166,26 @@ export async function logAttempt(
   attempt_data: AttemptQuestion[],
   participant: number
 ) {
+  const oldAttempts = await prisma.logs.findMany({
+    where: {
+      quiz: quizId,
+      participant: participant,
+    },
+    select: {
+      question_attempted: true,
+    },
+  });
+  if (oldAttempts.length > 0) {
+    attempt_data = attempt_data.filter((attempt) => {
+      for (let i = 0; i < oldAttempts.length; i++) {
+        if (oldAttempts[i].question_attempted === attempt.question_id) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }
+
   const newAttempt = await prisma.logs.createMany({
     data: await Promise.all(
       attempt_data.map(async (attempt) => {
@@ -238,7 +258,6 @@ export async function getTotalQuestionsInQuiz(quizId: number) {
       id: true,
     },
   });
-  console.log("length", questions.length);
   return questions.length;
 }
 
@@ -252,7 +271,6 @@ export async function getScore(quizId: number, participant: number) {
       score: true,
     },
   });
-  console.log("Score", score._sum.score);
   return score._sum.score;
 }
 
