@@ -1,37 +1,24 @@
-import { user } from "@prisma/client";
-import { auth0_client, auth0_management_client } from "./helper/auth0_helper";
 import { AttemptQuestion, RawQuizData } from "./helper/interfaces";
 import { decodeToken } from "./middleware/auth";
 import {
   createQuiz,
   getLeaderboard,
-  getQuiz,
   logAttempt,
   resumeQuiz,
 } from "./quiz/quiz";
 import { createUser, fetchUserFromAuth0, loginUser } from "./users/users";
 import { toArray } from "./helper/validator";
 
-const { auth } = require("express-openid-connect");
 const express = require("express");
-const jwt = require("jsonwebtoken");
+
 require("dotenv").config();
 
 const app = express();
 
 app.use(express.json());
 
-const config = {
-  authRequired: process.env.CONFIG_AUTH_REQUIRED,
-  auth0Logout: process.env.CONFIG_AUTH0_LOGOUT,
-  baseURL: process.env.BASE_URL,
-  clientID: process.env.AUTH0_CLIENT_ID,
-  issuerBaseURL: process.env.AUTH0_DOMAIN,
-  secret: process.env.AUTH0_CLIENT_SECRET,
-};
-
-app.get("/", (req: any, res: any) => {
-  res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
+app.get("/", decodeToken, (req: any, res: any) => {
+  res.send(req.user ? "Logged in" : "Logged out");
 });
 
 app.post("/login", async (req: any, res: any) => {
@@ -128,8 +115,9 @@ app.get("/quiz/:id/leaderboard", decodeToken, async (req: any, res: any) => {
   }
 });
 
-app.get("/profile", decodeToken, (req: any, res: any) => {
-  res.send(JSON.stringify({ hello: req.user }));
+app.get("/profile", decodeToken, async (req: any, res: any) => {
+  let user = await fetchUserFromAuth0(req.user);
+  res.send(JSON.stringify({ hello: req.user, user: user?.id }));
 });
 
 if (process.env.NODE_ENV === "production") {
