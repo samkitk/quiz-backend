@@ -87,6 +87,68 @@ export async function getQuiz(quizId: number) {
   }
 }
 
+export async function resumeQuiz(quizId: number, user_id: number) {
+  let attempts: any[] = [];
+  try {
+    attempts = await prisma.logs.findMany({
+      where: {
+        quiz: quizId,
+        participant: user_id,
+      },
+      select: {
+        question_attempted: true,
+        option_attempted: true,
+      },
+    });
+  } catch (error) {
+    console.log("Error in Getting Attempts", error);
+  }
+
+  if (attempts.length > 0) {
+    try {
+      const questions = await prisma.questions.findMany({
+        where: {
+          quiz: quizId,
+          NOT: {
+            id: {
+              in: attempts.map((attempt) => attempt.question_attempted),
+            },
+          },
+        },
+        select: {
+          id: true,
+          title: true,
+          options_options_questionsToquestions: {
+            select: {
+              id: true,
+              text: true,
+            },
+          },
+        },
+      });
+      return {
+        id: quizId,
+        title: await getQuizTitle(quizId),
+        questions: questions.map((question) => ({
+          id: question.id,
+          title: question.title,
+          options: question.options_options_questionsToquestions.map(
+            (option) => ({
+              id: option.id,
+              text: option.text,
+            })
+          ),
+        })),
+      };
+    } catch (error) {
+      console.error(error);
+    }
+  } else {
+    let get_quiz = await getQuiz(quizId);
+    return get_quiz;
+  }
+}
+
 export async function logAttempt(
   quizId: number,
   attempt_data: AttemptQuestion[],
@@ -122,4 +184,19 @@ export async function isAnswerCorrect(optionId: number) {
     return option.is_correct ? 1 : 0;
   }
   return 0;
+}
+
+export async function getQuizTitle(quizId: number) {
+  const quiz = await prisma.quiz.findUnique({
+    where: {
+      id: quizId,
+    },
+    select: {
+      title: true,
+    },
+  });
+  if (quiz) {
+    return quiz.title;
+  }
+  return null;
 }
