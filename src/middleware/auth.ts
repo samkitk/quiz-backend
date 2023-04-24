@@ -17,8 +17,6 @@ export const decodeToken = async (
 
     try {
       const decoded: DecodedToken = jwt_decode(bearerToken);
-      console.log("decoded", decoded);
-
       if (decoded) {
         req.user = decoded.sub;
         next();
