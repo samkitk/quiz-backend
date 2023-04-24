@@ -39,7 +39,7 @@ export async function createQuiz(quizData: RawQuizData, creator: number) {
   );
 
   console.log(`Created quiz with id ${newQuiz.id}`);
-  return newQuiz.id;
+  return newQuiz;
 }
 
 export async function getQuiz(quizId: number) {

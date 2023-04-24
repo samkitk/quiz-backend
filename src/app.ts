@@ -59,8 +59,13 @@ app.post("/quiz/add", decodeToken, async (req: any, res: any) => {
   let user: any = await fetchUserFromAuth0(req.user);
   try {
     let newQuizId = await createQuiz(quizData, user.id);
-    console.log("NEQ", newQuizId);
-    res.status(200).send({ message: "Quiz created successfully" });
+    res
+      .status(200)
+      .send({
+        message: "Quiz created successfully " + newQuizId.id,
+        shareable_url:
+          "http:://" + process.env.BASE_URL + "/quiz/" + newQuizId.id,
+      });
   } catch (error) {
     res.status(401).send({ message: "Quiz not created", error: error });
   }

@@ -30,6 +30,10 @@
     "precommit": "yarn format"
   },
   "devDependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@types/jest": "^29.5.1",
+    "babel-jest": "^29.5.0",
     "husky": "^8.0.3",
     "prettier": "^2.8.8",
     "prisma": "^4.13.0",

@@ -1,6 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { auth0_client } from "../helper/auth0_helper";
-import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
 import { AuthenticatedRequest, DecodedToken } from "../helper/interfaces";
 
