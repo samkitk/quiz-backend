@@ -1,6 +1,6 @@
 import { auth0_client, auth0_management_client } from "./helper/auth0_helper";
 import { decodeToken } from "./middleware/auth";
-import { createUser } from "./users/users";
+import { createUser, loginUser } from "./users/users";
 
 const { auth } = require("express-openid-connect");
 const express = require("express");
@@ -30,13 +30,11 @@ app.post("/login", async (req: any, res: any) => {
   let password = data.password;
 
   try {
-    const grant_response = await auth0_client.oauth.passwordGrant({
-      username: email,
-      password: password,
-      audience: process.env.AUTH0_AUDIENCE_URL,
-    });
-    let accessToken = grant_response.access_token;
-    res.status(200).send({ accessToken: accessToken });
+    let access_token = await loginUser(email, password);
+
+    if (access_token) {
+      res.status(200).send({ accessToken: access_token });
+    }
   } catch (error) {
     console.log(error);
     res.status(401).send({ error: error });
@@ -58,6 +56,8 @@ app.post("/signup", async (req: any, res: any) => {
     res.status(401).send({ error: error });
   }
 });
+
+app.post("/quiz/add", decodeToken, async (req: any, res: any) => {});
 
 app.get("/profile", decodeToken, (req: any, res: any) => {
   res.send(JSON.stringify({ hello: req.user }));
