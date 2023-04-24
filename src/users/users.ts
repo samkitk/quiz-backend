@@ -55,3 +55,17 @@ export async function loginUser(email: string, password: string) {
     return null;
   }
 }
+
+export async function fetchUserFromAuth0(user_id: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        auth0_user_id: user_id,
+      },
+    });
+    return user;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
