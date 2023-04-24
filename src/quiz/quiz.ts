@@ -89,6 +89,9 @@ export async function getQuiz(quizId: number) {
 
 export async function resumeQuiz(quizId: number, user_id: number) {
   let attempts: any[] = [];
+  let totalQuestions = await getTotalQuestionsInQuiz(quizId);
+  let quizTitle = await getQuizTitle(quizId);
+  let score = await getScore(quizId, user_id);
   try {
     attempts = await prisma.logs.findMany({
       where: {
@@ -104,7 +107,7 @@ export async function resumeQuiz(quizId: number, user_id: number) {
     console.log("Error in Getting Attempts", error);
   }
 
-  if (attempts.length > 0) {
+  if (attempts.length > 0 && attempts.length < totalQuestions) {
     try {
       const questions = await prisma.questions.findMany({
         where: {
@@ -128,7 +131,7 @@ export async function resumeQuiz(quizId: number, user_id: number) {
       });
       return {
         id: quizId,
-        title: await getQuizTitle(quizId),
+        title: quizTitle,
         questions: questions.map((question) => ({
           id: question.id,
           title: question.title,
@@ -143,6 +146,12 @@ export async function resumeQuiz(quizId: number, user_id: number) {
     } catch (error) {
       console.error(error);
     }
+  } else if (attempts.length === totalQuestions) {
+    return {
+      id: quizId,
+      title: quizTitle,
+      score: score + "/" + totalQuestions,
+    };
   } else {
     let get_quiz = await getQuiz(quizId);
     return get_quiz;
@@ -162,7 +171,7 @@ export async function logAttempt(
           quiz: quizId,
           question_attempted: attempt.question_id,
           option_attempted: attempt.option_id,
-          score: await isAnswerCorrect(attempt.option_id),
+          score: await isAnswerCorrect_v2(attempt.option_id),
         };
       })
     ),
@@ -186,6 +195,22 @@ export async function isAnswerCorrect(optionId: number) {
   return 0;
 }
 
+export async function isAnswerCorrect_v2(question_id: number) {
+  const options = await prisma.options.findMany({
+    where: {
+      questions: question_id,
+    },
+    select: {
+      is_correct: true,
+    },
+  });
+  if (options) {
+    let correct_answers = options.filter((option) => option.is_correct);
+    return correct_answers.length > 0 ? 1 / correct_answers.length : 0;
+  }
+  return 0;
+}
+
 export async function getQuizTitle(quizId: number) {
   const quiz = await prisma.quiz.findUnique({
     where: {
@@ -199,4 +224,31 @@ export async function getQuizTitle(quizId: number) {
     return quiz.title;
   }
   return null;
+}
+
+export async function getTotalQuestionsInQuiz(quizId: number) {
+  const questions = await prisma.questions.findMany({
+    where: {
+      quiz: quizId,
+    },
+    select: {
+      id: true,
+    },
+  });
+  console.log("length", questions.length);
+  return questions.length;
+}
+
+export async function getScore(quizId: number, participant: number) {
+  const score = await prisma.logs.aggregate({
+    where: {
+      quiz: quizId,
+      participant: participant,
+    },
+    _sum: {
+      score: true,
+    },
+  });
+  console.log("Score", score._sum.score);
+  return score._sum.score;
 }

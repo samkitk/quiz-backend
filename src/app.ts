@@ -2,7 +2,7 @@ import { user } from "@prisma/client";
 import { auth0_client, auth0_management_client } from "./helper/auth0_helper";
 import { AttemptQuestion, RawQuizData } from "./helper/interfaces";
 import { decodeToken } from "./middleware/auth";
-import { createQuiz, getQuiz, logAttempt } from "./quiz/quiz";
+import { createQuiz, getQuiz, logAttempt, resumeQuiz } from "./quiz/quiz";
 import { createUser, fetchUserFromAuth0, loginUser } from "./users/users";
 import { toArray } from "./helper/validator";
 
@@ -75,8 +75,9 @@ app.post("/quiz/add", decodeToken, async (req: any, res: any) => {
 
 app.get("/quiz/:id", decodeToken, async (req: any, res: any) => {
   let quizId = req.params.id;
+  let user: any = await fetchUserFromAuth0(req.user);
   try {
-    let quiz = await getQuiz(parseInt(quizId));
+    let quiz = await resumeQuiz(parseInt(quizId), user.id);
     if (quiz) {
       res.status(200).send({ quiz: quiz });
     } else {
