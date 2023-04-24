@@ -1,11 +1,11 @@
-import { RawQuizData } from "../helper/interfaces";
+import { Quiz, RawQuizData } from "../helper/interfaces";
 import { prisma } from "../helper/prisma_helper";
 
-export async function createQuiz(quizData: RawQuizData) {
+export async function createQuiz(quizData: RawQuizData, creator: number) {
   const newQuiz = await prisma.quiz.create({
     data: {
       title: quizData.title,
-      creator: quizData.creator,
+      creator: creator,
     },
   });
 
@@ -40,4 +40,49 @@ export async function createQuiz(quizData: RawQuizData) {
 
   console.log(`Created quiz with id ${newQuiz.id}`);
   return newQuiz.id;
+}
+
+export async function getQuiz(quizId: number) {
+  try {
+    const quiz = await prisma.quiz.findUnique({
+      where: {
+        id: quizId,
+      },
+      select: {
+        id: true,
+        title: true,
+        questions_questions_quizToquiz: {
+          select: {
+            id: true,
+            title: true,
+            options_options_questionsToquestions: {
+              select: {
+                id: true,
+                text: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (quiz) {
+      return {
+        id: quiz.id,
+        title: quiz.title,
+        questions: quiz.questions_questions_quizToquiz.map((question) => ({
+          id: question.id,
+          title: question.title,
+          options: question.options_options_questionsToquestions.map(
+            (option) => ({
+              id: option.id,
+              text: option.text,
+            })
+          ),
+        })),
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error(error);
+  }
 }
