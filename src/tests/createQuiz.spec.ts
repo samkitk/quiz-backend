@@ -1,4 +1,4 @@
-import { createQuiz } from "../src/quiz/quiz";
+import { createQuiz } from "../quiz/quiz";
 
 describe("createQuiz", () => {
   test("should create a new quiz successfully", async () => {
