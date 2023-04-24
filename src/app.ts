@@ -1,6 +1,8 @@
 import { auth0_client, auth0_management_client } from "./helper/auth0_helper";
+import { RawQuizData } from "./helper/interfaces";
 import { decodeToken } from "./middleware/auth";
-import { createUser, loginUser } from "./users/users";
+import { createQuiz, getQuiz } from "./quiz/quiz";
+import { createUser, fetchUserFromAuth0, loginUser } from "./users/users";
 
 const { auth } = require("express-openid-connect");
 const express = require("express");
@@ -57,7 +59,32 @@ app.post("/signup", async (req: any, res: any) => {
   }
 });
 
-app.post("/quiz/add", decodeToken, async (req: any, res: any) => {});
+app.post("/quiz/add", decodeToken, async (req: any, res: any) => {
+  let quizData: RawQuizData = req.body;
+  let user: any = await fetchUserFromAuth0(req.user);
+  try {
+    let newQuizId = await createQuiz(quizData, user.id);
+    console.log("NEQ", newQuizId);
+    res.status(200).send({ message: "Quiz created successfully" });
+  } catch (error) {
+    res.status(401).send({ message: "Quiz not created", error: error });
+  }
+});
+
+app.get("/quiz/:id", decodeToken, async (req: any, res: any) => {
+  let quizId = req.params.id;
+  try {
+    let quiz = await getQuiz(parseInt(quizId));
+    if (quiz) {
+      res.status(200).send({ quiz: quiz });
+    } else {
+      res.status(400).send({ message: "Quiz not present" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(401).send({ message: "Quiz not found", error: error });
+  }
+});
 
 app.get("/profile", decodeToken, (req: any, res: any) => {
   res.send(JSON.stringify({ hello: req.user }));
