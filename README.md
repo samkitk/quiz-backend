@@ -11,10 +11,11 @@ The objective is to create a restful API for a quiz app. For authentication, you
 
 ## Task Board
 
-| To Do                            | In Progress                 | Done               |
-| -------------------------------- | --------------------------- | ------------------ |
-| Think of edge cases in endpoints |                             | Database Schema    |
-| Deploying                        |                             | Auth0 Integration  |
-| CI/CD Pipelines                  |                             | Data Population    |
-|                                  | Add tests (research how to) | Custom User Routes |
-|                                  |                             | Quiz routes        |
+| To Do                                      | In Progress    | Done               |
+| ------------------------------------------ | -------------- | ------------------ |
+| Think of edge cases in endpoints           |                | Database Schema    |
+|                                            |                | Auth0 Integration  |
+| CI/CD Pipelines (Subject to more changes?) |                | Data Population    |
+|                                            | Add more tests | Custom User Routes |
+|                                            |                | Quiz routes        |
+|                                            |                | Deployed           |
