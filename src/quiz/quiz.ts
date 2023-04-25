@@ -110,7 +110,17 @@ export async function resumeQuiz(quizId: number, user_id: number) {
     console.log("Error in Getting Attempts", error);
   }
 
-  if (attempts.length > 0 && attempts.length < totalQuestions) {
+  console.log("attempts", attempts);
+  console.log("attempts.length", attempts.length);
+  console.log("totalQuestions", totalQuestions);
+
+  let all_questions_attempted = attempts.map((attempt) => {
+    return attempt.question_attempted;
+  });
+  let unique_questions_attempted = new Set(all_questions_attempted);
+  console.log("unique_questions_attempted", unique_questions_attempted.size);
+
+  if (attempts.length > 0 && unique_questions_attempted.size < totalQuestions) {
     try {
       const questions = await prisma.questions.findMany({
         where: {
@@ -149,7 +159,7 @@ export async function resumeQuiz(quizId: number, user_id: number) {
     } catch (error) {
       console.error(error);
     }
-  } else if (attempts.length === totalQuestions) {
+  } else if (unique_questions_attempted.size === totalQuestions) {
     return {
       id: quizId,
       title: quizTitle,
