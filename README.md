@@ -26,4 +26,16 @@ The objective is to create a restful API for a quiz app. For authentication, you
 ### Prerequisites
 
 - Node.js
--
+- PostgreSQL
+- Auth0 Account
+- Postman
+- Redis
+- Yarn/NPM
+
+### Setup
+
+- Clone the repository
+- Run `yarn install` to install dependencies
+- Create a `.env` file in the root directory following `.env.sample`
+- Run `yarn dev` to start the server locally.
+- Import the postman collection and environment variables for the collection from `docs` folder to test the endpoints.
