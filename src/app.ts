@@ -161,7 +161,9 @@ app.post("/quiz/answer", decodeToken, async (req: any, res: any) => {
   try {
     let attempt = await logAttempt(quizId, attempt_data, user.id);
     if (!attempt) {
-      return res.send({ message: "Attempted all already" });
+      return res
+        .status(400)
+        .send({ message: "Incorrect Data or Attempted all already" });
     }
     if (attempt.count > 0) {
       res.status(200).send({ message: "Attempt submitted successfully" });

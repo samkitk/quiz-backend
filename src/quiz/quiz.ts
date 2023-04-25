@@ -176,6 +176,12 @@ export async function logAttempt(
   attempt_data: AttemptQuestion[],
   participant: number
 ) {
+  let dataCheck = await checkAttemptDataBelongsToQuiz(quizId, attempt_data);
+  if (!dataCheck) {
+    console.log("Data does not belong to quiz");
+    return null;
+  }
+
   const oldAttempts = await prisma.logs.findMany({
     where: {
       quiz: quizId,
@@ -209,6 +215,7 @@ export async function logAttempt(
           question_attempted: attempt.question_id,
           option_attempted: attempt.option_id,
           score: await isAnswerCorrect_v2(
+            quizId,
             attempt.question_id,
             attempt.option_id
           ),
@@ -236,11 +243,15 @@ export async function isAnswerCorrect(optionId: number) {
 }
 
 export async function isAnswerCorrect_v2(
+  quizId: number,
   question_id: number,
   option_id: number
 ) {
   const allOptions = await prisma.options.findMany({
     where: {
+      questions_options_questionsToquestions: {
+        quiz: quizId,
+      },
       questions: question_id,
     },
     select: {
@@ -338,4 +349,42 @@ export async function getLeaderboard(quizId: number) {
   });
 
   return leaderboard;
+}
+
+export async function checkAttemptDataBelongsToQuiz(
+  quizId: number,
+  attempt_data: AttemptQuestion[]
+) {
+  const questionIds = attempt_data.map((attempt) => attempt.question_id);
+  const optionIds = attempt_data.map((attempt) => attempt.option_id);
+
+  const questions = await prisma.questions.findMany({
+    where: {
+      quiz: quizId,
+      id: { in: questionIds },
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (questions.length === 0) {
+    console.log("questions if", questions.length);
+    return false;
+  }
+
+  const options = await prisma.options.findMany({
+    where: {
+      questions: { in: questionIds },
+      id: { in: optionIds },
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (questions.length === 0 || options.length === 0) {
+    return false;
+  }
+  return true;
 }
