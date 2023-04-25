@@ -1,9 +1,9 @@
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const fixedSalt = process.env.SALT;
 
 export async function hashIt(password: string) {
   try {
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hashSync(password, fixedSalt);
     return hashedPassword;
   } catch (error) {
     console.error(error);
