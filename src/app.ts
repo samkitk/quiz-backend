@@ -1,5 +1,5 @@
 import { AttemptQuestion, RawQuizData } from "./helper/interfaces";
-import { decodeToken } from "./middleware/auth";
+import { decodeToken, isNewUser, isPasswordCorrect } from "./middleware/auth";
 import {
   createQuiz,
   getLeaderboard,
@@ -8,6 +8,7 @@ import {
 } from "./quiz/quiz";
 import { createUser, fetchUserFromAuth0, loginUser } from "./users/users";
 import { toArray } from "./helper/validator";
+import { redis } from "./helper/redis_helper";
 
 const express = require("express");
 
@@ -25,11 +26,35 @@ app.post("/login", async (req: any, res: any) => {
   var data = req.body;
   let email = data.email;
   let password = data.password;
+  if (!email || !password) {
+    return res
+      .status(400)
+      .send({ message: "Both email and password are required" });
+  }
+
+  let login = await isPasswordCorrect(email, password);
+  if (!login) {
+    return res.status(401).send({ message: "Incorrect Password/Email" });
+  }
+
+  const redis_access_token_key = "access_token_" + email;
+
+  const redisResponse = await redis.get(redis_access_token_key);
+
+  if (redisResponse) {
+    return res.status(200).send({ accessToken: redisResponse });
+  }
 
   try {
     let access_token = await loginUser(email, password);
 
     if (access_token) {
+      await redis.set(
+        redis_access_token_key,
+        access_token,
+        "EX",
+        60 * 60 * 24 * 1
+      );
       res.status(200).send({ accessToken: access_token });
     }
   } catch (error) {
@@ -40,6 +65,18 @@ app.post("/login", async (req: any, res: any) => {
 
 app.post("/signup", async (req: any, res: any) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res
+      .status(400)
+      .send({ message: "Both email and password are required" });
+  }
+
+  const userDoesNotAccountExist = await isNewUser(email);
+
+  if (!userDoesNotAccountExist) {
+    return res.status(400).send({ message: "Email already exists" });
+  }
 
   try {
     let newUser = await createUser(email, password);
@@ -57,6 +94,15 @@ app.post("/signup", async (req: any, res: any) => {
 app.post("/quiz/add", decodeToken, async (req: any, res: any) => {
   let quizData: RawQuizData = req.body;
   let user: any = await fetchUserFromAuth0(req.user);
+
+  if (
+    !quizData.title ||
+    !quizData.questions ||
+    !Array.isArray(quizData.questions)
+  ) {
+    return res.status(400).json({ message: "Invalid quiz data format" });
+  }
+
   try {
     let newQuizId: any = await createQuiz(quizData, user.id);
     res.status(200).send({
@@ -97,6 +143,11 @@ app.post("/quiz/answer", decodeToken, async (req: any, res: any) => {
   }
   let quizId = req.body.quizId;
   let attempt_data: AttemptQuestion[] = toArray(req.body.attempt_data);
+
+  if (!quizId || !attempt_data) {
+    return res.status(400).send({ message: "Invalid data format" });
+  }
+
   try {
     let attempt = await logAttempt(quizId, attempt_data, user.id);
     if (attempt.count > 0) {
