@@ -11,11 +11,19 @@ The objective is to create a restful API for a quiz app. For authentication, you
 
 ## Task Board
 
-| To Do                                      | In Progress    | Done               |
-| ------------------------------------------ | -------------- | ------------------ |
-| Think of edge cases in endpoints           |                | Database Schema    |
-|                                            |                | Auth0 Integration  |
-| CI/CD Pipelines (Subject to more changes?) |                | Data Population    |
-|                                            | Add more tests | Custom User Routes |
-|                                            |                | Quiz routes        |
-|                                            |                | Deployed           |
+| To Do                                      | In Progress    | Done                             |
+| ------------------------------------------ | -------------- | -------------------------------- |
+|                                            |                | Database Schema                  |
+|                                            |                | Auth0 Integration                |
+| CI/CD Pipelines (Subject to more changes?) |                | Data Population                  |
+|                                            | Add more tests | Custom User Routes               |
+|                                            |                | Quiz routes                      |
+|                                            |                | Deployed                         |
+|                                            |                | Think of edge cases in endpoints |
+
+## Local Development/Setup
+
+### Prerequisites
+
+- Node.js
+-
