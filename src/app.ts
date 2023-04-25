@@ -35,13 +35,11 @@ app.post("/login", async (req: any, res: any) => {
   const userDoesNotAccountExist = await isNewUser(email);
 
   if (userDoesNotAccountExist) {
-    return res
-      .status(400)
-      .send({
-        message: "Email does not exist, you should sign up instead",
-        url:
-          "http://" + process.env.BASE_URL + ":" + process.env.PORT + "/signup",
-      });
+    return res.status(400).send({
+      message: "Email does not exist, you should sign up instead",
+      url:
+        "http://" + process.env.BASE_URL + ":" + process.env.PORT + "/signup",
+    });
   }
 
   let login = await isPasswordCorrect(email, password);
@@ -162,6 +160,9 @@ app.post("/quiz/answer", decodeToken, async (req: any, res: any) => {
 
   try {
     let attempt = await logAttempt(quizId, attempt_data, user.id);
+    if (!attempt) {
+      return res.send({ message: "Attempted all already" });
+    }
     if (attempt.count > 0) {
       res.status(200).send({ message: "Attempt submitted successfully" });
     }

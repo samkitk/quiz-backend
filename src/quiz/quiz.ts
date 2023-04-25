@@ -186,6 +186,10 @@ export async function logAttempt(
     });
   }
 
+  if (attempt_data.length === 0) {
+    return null;
+  }
+
   const newAttempt = await prisma.logs.createMany({
     data: await Promise.all(
       attempt_data.map(async (attempt) => {
@@ -194,7 +198,10 @@ export async function logAttempt(
           quiz: quizId,
           question_attempted: attempt.question_id,
           option_attempted: attempt.option_id,
-          score: await isAnswerCorrect_v2(attempt.question_id),
+          score: await isAnswerCorrect_v2(
+            attempt.question_id,
+            attempt.option_id
+          ),
         };
       })
     ),
@@ -218,18 +225,28 @@ export async function isAnswerCorrect(optionId: number) {
   return 0;
 }
 
-export async function isAnswerCorrect_v2(question_id: number) {
-  const options = await prisma.options.findMany({
+export async function isAnswerCorrect_v2(
+  question_id: number,
+  option_id: number
+) {
+  const allOptions = await prisma.options.findMany({
     where: {
       questions: question_id,
     },
     select: {
+      id: true,
       is_correct: true,
     },
   });
-  if (options) {
-    let correct_answers = options.filter((option) => option.is_correct);
-    return correct_answers.length > 0 ? 1 / correct_answers.length : 0;
+  if (allOptions) {
+    let correct_options = allOptions.filter((option) => option.is_correct);
+    let correct_answers = correct_options.filter(
+      (option) => option.id === option_id
+    );
+
+    let per_correct_attempt_score =
+      correct_options.length > 0 ? 1 / correct_options.length : 0;
+    return correct_answers.length * per_correct_attempt_score;
   }
   return 0;
 }
