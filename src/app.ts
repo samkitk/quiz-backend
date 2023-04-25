@@ -32,6 +32,18 @@ app.post("/login", async (req: any, res: any) => {
       .send({ message: "Both email and password are required" });
   }
 
+  const userDoesNotAccountExist = await isNewUser(email);
+
+  if (userDoesNotAccountExist) {
+    return res
+      .status(400)
+      .send({
+        message: "Email does not exist, you should sign up instead",
+        url:
+          "http://" + process.env.BASE_URL + ":" + process.env.PORT + "/signup",
+      });
+  }
+
   let login = await isPasswordCorrect(email, password);
   if (!login) {
     return res.status(401).send({ message: "Incorrect Password/Email" });
