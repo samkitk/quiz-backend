@@ -1,0 +1,33 @@
+{
+  "id": "124dc18f-9407-43ba-b6c7-7cdddebfae66",
+  "name": "New Environment",
+  "values": [
+    {
+      "key": "token",
+      "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkV5bk9ZclZrZFN1cFB6R0N1Y1ZHeiJ9.eyJpc3MiOiJodHRwczovL2Rldi1rY29sZnZ0dmpsaXA4dHR4LnVrLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2NDQ2ZjgzOTRiZDdkODUwMjU5OTVkYzkiLCJhdWQiOiJodHRwczovL2Rldi1rY29sZnZ0dmpsaXA4dHR4LnVrLmF1dGgwLmNvbS9hcGkvdjIvIiwiaWF0IjoxNjgyMzcyNzAzLCJleHAiOjE2ODI0NTkxMDMsImF6cCI6ImZmbHl6RnlPUjU0U1B2Q0NXdTk5SGt1cGN3Q2xtMWJwIiwic2NvcGUiOiJyZWFkOmN1cnJlbnRfdXNlciB1cGRhdGU6Y3VycmVudF91c2VyX21ldGFkYXRhIGRlbGV0ZTpjdXJyZW50X3VzZXJfbWV0YWRhdGEgY3JlYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBjcmVhdGU6Y3VycmVudF91c2VyX2RldmljZV9jcmVkZW50aWFscyBkZWxldGU6Y3VycmVudF91c2VyX2RldmljZV9jcmVkZW50aWFscyB1cGRhdGU6Y3VycmVudF91c2VyX2lkZW50aXRpZXMiLCJndHkiOiJwYXNzd29yZCJ9.f7NpuwcUxkWiK3iJ5LS4aRTwwQAANfXw_qSLGFlD_U1wcVElwuO5vBjn2n987ZUEJXweIApGdHtPKG53ESsQWKCpuF0FGDtawo5PrU6NHH4w-nwQFGEnQqdvVKpaZQ4rLln8f0nwdXfC2QxyxhmCZaxEF9UtIBN58rTn45uoPpVV1i9h9vaYegX_cmpGmCzIfJnmTrsqOTpsY1hIJ0WLhL71wNYb0ZQhssWbMgPzK6XBF56NoIp2inl9oc92BPT4OxaoEj4m5CQ2Js7lVpUDTHpCWeJYKot-Z6bnDOmtXizS86mV64zzTmpOIkQvq0tlXDl_xTJNv4_1IFZ5jtNjeQ",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "host",
+      "value": "139.59.85.184",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "port",
+      "value": "3000",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "url",
+      "value": "{{host}}:{{port}}",
+      "type": "default",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2023-04-25T06:43:58.694Z",
+  "_postman_exported_using": "Postman/9.31.28"
+}

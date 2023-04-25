@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "d8174efd-d1aa-40b7-a824-a7eae66de794",
-    "name": "New Collection",
+    "name": "Backend-APIs",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "21382497"
   },
@@ -13,7 +13,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"email\": \"email@gmail.com\",\n    \"password\": \"password\"\n}",
+          "raw": "{\n    \"email\": \"supyo@gmail.com\",\n    \"password\": \"password\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -21,9 +21,8 @@
           }
         },
         "url": {
-          "raw": "localhost:3000/login",
-          "host": ["localhost"],
-          "port": "3000",
+          "raw": "{{url}}/login",
+          "host": ["{{url}}"],
           "path": ["login"]
         }
       },
@@ -36,7 +35,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"email\": \"email@gmail.com\",\n    \"password\": \"password\"\n}",
+          "raw": "{\n    \"email\": \"supyo@gmail.com\",\n    \"password\": \"password\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -44,9 +43,8 @@
           }
         },
         "url": {
-          "raw": "localhost:3000/signup",
-          "host": ["localhost"],
-          "port": "3000",
+          "raw": "{{url}}/signup",
+          "host": ["{{url}}"],
           "path": ["signup"]
         }
       },
@@ -67,9 +65,8 @@
           }
         ],
         "url": {
-          "raw": "localhost:3000/profile",
-          "host": ["localhost"],
-          "port": "3000",
+          "raw": "{{url}}/profile",
+          "host": ["{{url}}"],
           "path": ["profile"]
         }
       },
@@ -88,7 +85,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"title\": \"LOL Quiz 2\",\n  \"questions\": [\n    {\n      \"title\": \"What is the capital of Guj?\",\n      \"options\": [\n        {\n          \"text\": \"Ahmedabad\",\n          \"is_correct\": true\n        },\n        {\n          \"text\": \"Paris\",\n          \"is_correct\": true\n        },\n        {\n          \"text\": \"Madrid\",\n          \"is_correct\": false\n        }\n      ]\n    },\n    {\n      \"title\": \"What is the best country to live in?\",\n      \"options\": [\n        {\n          \"text\": \"Russia\",\n          \"is_correct\": true\n        },\n        {\n          \"text\": \"China\",\n          \"is_correct\": false\n        },\n        {\n          \"text\": \"USA\",\n          \"is_correct\": true\n        }\n      ]\n    }\n  ]\n}",
+          "raw": "{\n  \"title\": \"Movie Trivia Quiz\",\n  \"questions\": [\n    {\n      \"title\": \"Who directed the movie 'The Godfather'?\",\n      \"options\": [\n        {\n          \"text\": \"Martin Scorsese\",\n          \"is_correct\": false\n        },\n        {\n          \"text\": \"Francis Ford Coppola\",\n          \"is_correct\": true\n        },\n        {\n          \"text\": \"Steven Spielberg\",\n          \"is_correct\": false\n        }\n      ]\n    },\n    {\n      \"title\": \"Which movie won the Best Picture Oscar in 2020?\",\n      \"options\": [\n        {\n          \"text\": \"1917\",\n          \"is_correct\": false\n        },\n        {\n          \"text\": \"Parasite\",\n          \"is_correct\": true\n        },\n        {\n          \"text\": \"Once Upon a Time in Hollywood\",\n          \"is_correct\": false\n        },\n        {\n          \"text\": \"Joker\",\n          \"is_correct\": false\n        }\n      ]\n    },\n    {\n      \"title\": \"Who played the character of Tony Stark in the Marvel Cinematic Universe?\",\n      \"options\": [\n        {\n          \"text\": \"Tom Cruise\",\n          \"is_correct\": false\n        },\n        {\n          \"text\": \"Robert Downey Jr.\",\n          \"is_correct\": true\n        },\n        {\n          \"text\": \"Brad Pitt\",\n          \"is_correct\": false\n        },\n        {\n          \"text\": \"Johnny Depp\",\n          \"is_correct\": false\n        }\n      ]\n    }\n  ]\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -96,9 +93,8 @@
           }
         },
         "url": {
-          "raw": "localhost:3000/quiz/add",
-          "host": ["localhost"],
-          "port": "3000",
+          "raw": "{{url}}/quiz/add",
+          "host": ["{{url}}"],
           "path": ["quiz", "add"]
         }
       },
@@ -117,7 +113,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"quizId\": 4,\n    \"attempt_data\": [\n        {\n            \"question_id\": 7,\n            \"option_id\": 19\n        },\n        {\n            \"question_id\": 7,\n            \"option_id\": 23\n        }\n    ]\n}",
+          "raw": "{\n    \"quizId\": 11,\n    \"attempt_data\": [\n        {\n            \"question_id\": 20,\n            \"option_id\": 64\n        },\n        {\n            \"question_id\": 22,\n            \"option_id\": 67\n        }\n    ]\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -125,9 +121,8 @@
           }
         },
         "url": {
-          "raw": "localhost:3000/quiz/answer",
-          "host": ["localhost"],
-          "port": "3000",
+          "raw": "{{url}}/quiz/answer",
+          "host": ["{{url}}"],
           "path": ["quiz", "answer"]
         }
       },
@@ -145,10 +140,9 @@
           }
         ],
         "url": {
-          "raw": "localhost:3000/quiz/3",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["quiz", "3"]
+          "raw": "{{url}}/quiz/11",
+          "host": ["{{url}}"],
+          "path": ["quiz", "11"]
         }
       },
       "response": []
@@ -165,10 +159,9 @@
           }
         ],
         "url": {
-          "raw": "localhost:3000/quiz/4/leaderboard",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["quiz", "4", "leaderboard"]
+          "raw": "{{url}}/quiz/11/leaderboard",
+          "host": ["{{url}}"],
+          "path": ["quiz", "11", "leaderboard"]
         }
       },
       "response": []
