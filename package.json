@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node ./lib/app.js",
+    "start": "node -r dotenv/config ./lib/app.js",
     "prepare": "husky install",
     "lint": "prettier --check .",
     "format": "prettier --write .",
