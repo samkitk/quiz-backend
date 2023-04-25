@@ -30,7 +30,9 @@
     "lint": "prettier --check .",
     "format": "prettier --write .",
     "dev": "tsc-watch --noClear --onSuccess \"node -r dotenv/config lib/app.js\"",
-    "precommit": "yarn format"
+    "precommit": "yarn format",
+    "hard-reload": "yarn hard-stop && yarn pm2 start \"yarn start\" --name api --watch",
+    "hard-stop": "yarn pm2 stop api"
   },
   "devDependencies": {
     "@babel/core": "^7.21.4",
