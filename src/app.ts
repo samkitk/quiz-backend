@@ -1,5 +1,9 @@
 import { AttemptQuestion, RawQuizData } from "./helper/interfaces";
-import { decodeToken, isNewUser, isPasswordCorrect } from "./middleware/auth";
+import {
+  decodeToken,
+  doesUserAccountExist,
+  isPasswordCorrect,
+} from "./middleware/auth";
 import {
   createQuiz,
   getLeaderboard,
@@ -32,9 +36,9 @@ app.post("/login", async (req: any, res: any) => {
       .send({ message: "Both email and password are required" });
   }
 
-  const userDoesNotAccountExist = await isNewUser(email);
+  const user = await doesUserAccountExist(email);
 
-  if (userDoesNotAccountExist) {
+  if (!user) {
     return res.status(400).send({
       message: "Email does not exist, you should sign up instead",
       url:
@@ -82,9 +86,9 @@ app.post("/signup", async (req: any, res: any) => {
       .send({ message: "Both email and password are required" });
   }
 
-  const userDoesNotAccountExist = await isNewUser(email);
+  const userDoesNotAccountExist = await doesUserAccountExist(email);
 
-  if (!userDoesNotAccountExist) {
+  if (userDoesNotAccountExist) {
     return res.status(400).send({ message: "Email already exists" });
   }
 

@@ -48,7 +48,7 @@ export async function isPasswordCorrect(email: string, password: string) {
   return false;
 }
 
-export async function isNewUser(email: string) {
+export async function doesUserAccountExist(email: string) {
   const user = await prisma.user.findUnique({
     where: {
       email: email,
@@ -56,7 +56,7 @@ export async function isNewUser(email: string) {
   });
 
   if (user) {
-    return false;
+    return true;
   }
-  return true;
+  return false;
 }
